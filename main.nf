@@ -39,7 +39,7 @@ qual  = 'I' * ${params.read_length}
 with open('${sample_id}.fastq', 'w') as f:
     for i in range(${params.num_reads}):
         seq = ''.join(random.choices(bases, k=${params.read_length}))
-        f.write(f'@${sample_id}_read_{i}\n{seq}\n+\n{qual}\n')
+        f.write('@${sample_id}_read_' + str(i) + '\\n' + seq + '\\n+\\n' + qual + '\\n')
 "
     """
 }
@@ -148,7 +148,6 @@ samples = '${sample_list}'.split()
 fastqc_files = sorted(glob.glob('*_fastqc.json'))
 align_files  = sorted(glob.glob('*_align.json'))
 
-# Build lookup by sample_id prefix
 def load_by_prefix(files):
     out = {}
     for f in files:
