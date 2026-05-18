@@ -20,6 +20,7 @@ params.num_samples = 100
 params.read_length = 150
 params.num_reads   = 200000
 params.run_seed    = (new Date().format('yyyyMMdd')).toInteger()
+params.run_name    = "RUN"      // set to Nextflow run name for unique sample IDs
 
 process FASTQC_SIM {
     tag "${sample_id}"
@@ -170,7 +171,7 @@ print('Aggregated', len(result['samples']), 'samples, mode=${params.mode}')
 }
 
 workflow {
-    def sample_ids = (1..params.num_samples).collect { String.format("S%03d", it) }
+    def sample_ids = (1..params.num_samples).collect { params.run_name + "_" + String.format("S%03d", it) }
 
     samples_ch = Channel.fromList(sample_ids)
         .map { sid -> tuple(sid, params.mode, params.run_seed) }
